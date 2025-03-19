@@ -10,7 +10,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $query = "INSERT INTO tugas (nama_tugas, deskripsi, status, tanggal_deadline) VALUES ('$nama_tugas', '$deskripsi', '$status', '$tanggal_deadline')";
     mysqli_query($koneksi, $query);
 
-    header("Location: index.php");
+    header("Location: home.php");
     exit();
 }
 ?>
@@ -48,7 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <input type="date" class="form-control" id="tanggal_deadline" name="tanggal_deadline" required>
             </div>
             <button type="submit" class="btn btn-primary">Simpan</button>
-            <a href="index.php" class="btn btn-secondary">Kembali</a>
+            <a href="home.php" class="btn btn-secondary">Kembali</a>
         </form>
     </div>
 </body>

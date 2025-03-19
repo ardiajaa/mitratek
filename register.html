@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Mitratek</title>
+    <title>Daftar Akun Mitratek</title>
     <link rel="icon" type="image/png" href="https://i.imgur.com/g5CmzQS.png">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
@@ -44,12 +44,12 @@
 <body class="animate-gradient min-h-screen flex flex-col items-center justify-center p-4">
     <div class="bg-white p-8 rounded-xl shadow-2xl w-full max-w-md bg-opacity-95 slide-up">
         <div class="text-center">
-            <h1 class="text-2xl font-bold text-gray-800">Login Manajemen Projek Mitratek</h1> 
+            <h1 class="text-2xl font-bold text-gray-800">Daftar Akun Mitratek</h1> 
             <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQNm0GjPZAmo763q1oTRqAZdm5AV3CJsp6JLg&s" alt="Logo Mitratek" class="mx-auto my-4 h-28">
-            <p class="text-gray-500 text-sm">Silakan masuk ke akun Anda</p>
+            <p class="text-gray-500 text-sm">Buat akun baru untuk mengakses sistem</p>
         </div>
 
-        <form id="loginForm" action="login.php" method="POST" class="space-y-6 mt-4">
+        <form id="registerForm" action="register.php" method="POST" class="space-y-6 mt-4">
             <div>
                 <label for="username" class="block text-sm font-medium text-gray-700">
                     <i class="fas fa-user text-gray-400 mr-2"></i>Username
@@ -73,23 +73,37 @@
                 </div>
             </div>
 
+            <div class="relative">
+                <label for="confirm_password" class="block text-sm font-medium text-gray-700">
+                    <i class="fas fa-lock text-gray-400 mr-2"></i>Konfirmasi Password
+                </label>
+                <div class="relative">
+                    <input type="password" id="confirm_password" name="confirm_password" required
+                        class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200"
+                        placeholder="Konfirmasi password">
+                    <button type="button" id="toggleConfirmPassword" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </div>
+            </div>
+
             <button type="submit"
                 class="w-full bg-blue-500 text-white py-3 px-4 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-200 flex items-center justify-center space-x-2">
-                <i class="fas fa-sign-in-alt"></i>
-                <span>Login</span>
+                <i class="fas fa-user-plus"></i>
+                <span>Daftar</span>
             </button>
         </form>
 
-        <div id="errorNotification" class="mt-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg text-center hidden">
+        <div id="notification" class="mt-4 p-4 border rounded-lg text-center hidden">
             <div class="flex items-center justify-center space-x-2">
-                <i class="fas fa-exclamation-circle"></i>
-                <span id="errorMessage"></span>
+                <i id="notificationIcon"></i>
+                <span id="notificationMessage"></span>
             </div>
         </div>
 
         <div class="mt-6 text-center">
-            <p class="text-sm text-gray-600">Belum punya akun? 
-                <a href="register.html" class="text-blue-500 hover:text-blue-700 font-semibold">Daftar di sini</a>
+            <p class="text-sm text-gray-600">Sudah punya akun? 
+                <a href="index.html" class="text-blue-500 hover:text-blue-700 font-semibold">Login di sini</a>
             </p>
         </div>
 
@@ -100,10 +114,13 @@
 
     <script>
         const togglePassword = document.getElementById('togglePassword');
+        const toggleConfirmPassword = document.getElementById('toggleConfirmPassword');
         const passwordInput = document.getElementById('password');
-        const loginForm = document.getElementById('loginForm');
-        const errorNotification = document.getElementById('errorNotification');
-        const errorMessageElement = document.getElementById('errorMessage');
+        const confirmPasswordInput = document.getElementById('confirm_password');
+        const registerForm = document.getElementById('registerForm');
+        const notification = document.getElementById('notification');
+        const notificationMessage = document.getElementById('notificationMessage');
+        const notificationIcon = document.getElementById('notificationIcon');
 
         togglePassword.addEventListener('click', function() {
             const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
@@ -111,49 +128,63 @@
             togglePassword.innerHTML = type === 'password' ? '<i class="fas fa-eye"></i>' : '<i class="fas fa-eye-slash"></i>';
         });
 
-        loginForm.addEventListener('submit', function(e) {
+        toggleConfirmPassword.addEventListener('click', function() {
+            const type = confirmPasswordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            confirmPasswordInput.setAttribute('type', type);
+            toggleConfirmPassword.innerHTML = type === 'password' ? '<i class="fas fa-eye"></i>' : '<i class="fas fa-eye-slash"></i>';
+        });
+
+        registerForm.addEventListener('submit', function(e) {
             e.preventDefault();
             
-            fetch('login.php', {
+            // Check if passwords match
+            if (passwordInput.value !== confirmPasswordInput.value) {
+                showNotification('Password dan konfirmasi password tidak sama', 'error');
+                return;
+            }
+            
+            fetch('register.php', {
                 method: 'POST',
                 body: new FormData(this)
             })
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    window.location.href = data.redirect;
+                    showNotification(data.message, 'success');
+                    setTimeout(() => {
+                        window.location.href = 'index.html';
+                    }, 2000);
                 } else {
-                    showError(data.message || 'Login gagal');
+                    showNotification(data.message, 'error');
                 }
             })
             .catch(error => {
-                showError('Terjadi kesalahan. Silakan coba lagi.');
+                showNotification('Terjadi kesalahan. Silakan coba lagi.', 'error');
             });
         });
 
-        function showError(message) {
-            errorMessageElement.textContent = message;
-            errorNotification.classList.remove('hidden');
-            errorNotification.classList.add('shake');
+        function showNotification(message, type) {
+            notificationMessage.textContent = message;
+            notification.classList.remove('hidden', 'bg-red-100', 'border-red-400', 'text-red-700', 'bg-green-100', 'border-green-400', 'text-green-700');
+            
+            if (type === 'error') {
+                notification.classList.add('bg-red-100', 'border-red-400', 'text-red-700', 'shake');
+                notificationIcon.className = 'fas fa-exclamation-circle';
+            } else {
+                notification.classList.add('bg-green-100', 'border-green-400', 'text-green-700');
+                notificationIcon.className = 'fas fa-check-circle';
+            }
             
             setTimeout(() => {
-                errorNotification.classList.remove('shake');
+                notification.classList.remove('shake');
             }, 820);
         }
 
         const urlParams = new URLSearchParams(window.location.search);
-        const errorMessage = urlParams.get('error');
-        if (errorMessage) {
-            showError(decodeURIComponent(errorMessage));
-            history.replaceState({}, document.title, window.location.pathname);
-        }
-
-        const successMessage = urlParams.get('success');
-        if (successMessage) {
-            errorMessageElement.textContent = decodeURIComponent(successMessage);
-            errorNotification.classList.remove('hidden', 'bg-red-100', 'border-red-400', 'text-red-700');
-            errorNotification.classList.add('bg-green-100', 'border-green-400', 'text-green-700');
-            errorNotification.querySelector('i').className = 'fas fa-check-circle';
+        const message = urlParams.get('message');
+        const type = urlParams.get('type');
+        if (message) {
+            showNotification(decodeURIComponent(message), type || 'error');
             history.replaceState({}, document.title, window.location.pathname);
         }
     </script>

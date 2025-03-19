@@ -11,7 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $query = "UPDATE tugas SET nama_tugas='$nama_tugas', deskripsi='$deskripsi', status='$status', tanggal_deadline='$tanggal_deadline' WHERE id=$id";
     mysqli_query($koneksi, $query);
 
-    header("Location: index.php");
+    header("Location: home.php");
     exit();
 }
 
@@ -55,7 +55,7 @@ $row = mysqli_fetch_assoc($result);
                 <input type="date" class="form-control" id="tanggal_deadline" name="tanggal_deadline" value="<?php echo $row['tanggal_deadline']; ?>" required>
             </div>
             <button type="submit" class="btn btn-primary">Simpan</button>
-            <a href="index.php" class="btn btn-secondary">Kembali</a>
+            <a href="home.php" class="btn btn-secondary">Kembali</a>
         </form>
     </div>
 </body>

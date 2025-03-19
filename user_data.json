@@ -1,0 +1,23 @@
+{
+    "admin": {
+        "password": "$2y$10$tHp.YjZuBR0\/jckk4wAzVOjiLjQlcM5ZYQehe9hVqUbAcA6mQF3OG"
+    },
+    "ardi": {
+        "password": "$2y$10$fI1AZ2H4BbUC7KPAso.LCevyYlFlZ5iecggKOLEQu8jNaC0A9neWC"
+    },
+    "user": {
+        "password": "$2y$10$i6H6wAC4Bij0as3UqNdvCu9QWAtUNIQ4y6IISmVNgEN5OEk3FvYiW"
+    },
+    "semeru": {
+        "password": "$2y$10$OJGkSnvxr4ROn1vZbcNYteopSdQaMuUJL3Rj2Q6Pp.ZCKf3ZtrSD6"
+    },
+    "erere": {
+        "password": "$2y$10$FmV\/XnlxasD36TfS2Nw7tuF52VUA6EEMemxoHsY16f6DGKmEHHXca"
+    },
+    "ardiganteng": {
+        "password": "$2y$10$yXrhhEVkL5anQM.CN8Nv2ejLxG2EG9WdNimoE1xqDEwI22Bcm44h2"
+    },
+    "cindy": {
+        "password": "$2y$10$Zb18yGSf0T5n84\/f64CXeufSPhn3IpMqDeaQ7IUCP3tmHY28ftDzi"
+    }
+}
